@@ -1,0 +1,14 @@
+import Header from './Header'
+import Footer from './Footer'
+
+export default function Layout({ children, onHintClick, onTablesClick }) {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header onHintClick={onHintClick} onTablesClick={onTablesClick} />
+      <main className="flex flex-1 overflow-hidden" style={{ height: 'calc(100vh - 97px)' }}>
+        {children}
+      </main>
+      <Footer />
+    </div>
+  )
+}
