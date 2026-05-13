@@ -4,6 +4,9 @@ export default function Footer() {
       <span className="font-mono text-xs text-muted tracking-widest uppercase">
         Davos, Switzerland — January 2024
       </span>
+      <span className="font-mono text-xs text-text-dim tracking-widest uppercase opacity-40">
+        A SQL mystery game
+      </span>
       <span className="font-mono text-xs text-border tracking-widest uppercase">
         Room 1204
       </span>

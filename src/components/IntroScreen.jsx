@@ -104,6 +104,22 @@ export default function IntroScreen({ onEnter, dbReady }) {
         </span>
       </div>
 
+      {/* Davos image */}
+      <div className="max-w-xl w-full px-8 mb-8">
+        <div className="relative w-full h-48 overflow-hidden" style={{ borderBottom: '1px solid #1e1e2e' }}>
+          <img
+            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"
+            alt="Davos, Switzerland"
+            className="w-full h-full object-cover object-center opacity-60"
+            style={{ filter: 'grayscale(60%) contrast(1.1)' }}
+          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 50%, #0a0a0f 100%)' }} />
+          <span className="absolute bottom-2 right-3 font-mono text-xs text-text-dim opacity-40 tracking-widest uppercase">
+            Davos, Switzerland
+          </span>
+        </div>
+      </div>
+
       {/* Typed text block */}
       <div className="max-w-xl w-full px-8">
         {visibleLines.map((line, i) => (
