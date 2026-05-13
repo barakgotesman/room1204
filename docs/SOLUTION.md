@@ -52,8 +52,8 @@ Marcus used his research clearance (level 4, granted by Harmon himself) to steal
 | 1 | Entered room 1204 at 20:25 — before Harmon returned | hotel_key_access | WHERE + time filter |
 | 2 | Sold $3.4M of stock the day before the murder | stock_trades | JOIN + calculation |
 | 3 | Every sell preceded a bad announcement by 1–3 days | stock_trades + company_decisions | JOIN on date range |
-| 4 | Stole RH-7749 from lab on Jan 14 | lab_access_logs + drug_inventory | JOIN on session_id |
-| 5 | Had clearance level 4 — only one with access to RH-7749 | research_clearance | JOIN + WHERE |
+| 4 | Stole RH-7749 from lab on Jan 14 | lab_access_logs + drug_inventory | JOIN on access_date |
+| 5 | Had clearance level 4 — only NovaPharma employee with access to RH-7749 on Jan 14 | research_clearance + lab_access_logs | JOIN + WHERE clearance_level >= 4 |
 | 6 | Sent a deleted email about "RH-7749 confirmation" Jan 16 | emails | WHERE deleted = 1 |
 | 7 | No travel record — stayed in Davos, no alibi | travel_records | absence of rows |
 | 8 | Instagram post with MANUAL location tag — not GPS | social_media_posts | noise / red herring |
@@ -65,9 +65,9 @@ Marcus used his research clearance (level 4, granted by Harmon himself) to steal
 The final query requires ALL THREE of:
 1. Person who accessed room 1204 BEFORE Harmon returned (access_time < 21:15, entry only)
 2. Person who sold > $1M of stock on 2024-01-16
-3. Person who accessed RH-7749 between Jan 10–17
+3. Person who accessed the lab on 2024-01-14 AND had clearance level ≥ 4
 
-Only Marcus satisfies all three. No other person in the database does.
+Only Marcus satisfies all three. Sofia and Okafor also accessed the lab on Jan 14, but their clearance levels (3 and 2) were too low for RH-7749. Harmon had level 5 clearance but is the victim.
 
 ---
 
@@ -82,7 +82,8 @@ Only Marcus satisfies all three. No other person in the database does.
 - Time of death: **21:50** (window: 21:40–22:00)
 - RH-7749 onset: **60–90 minutes** → administered ~20:20–20:50 → consistent with Marcus's visit
 - Marcus's stock sale: **2024-01-16** (day before murder), $3,401,000
-- Lab theft: **2024-01-14**, session_id = 1, quantity 50 → 49
+- Lab theft: **2024-01-14**, last_access_date = 2024-01-14, quantity 50 → 49
+- Sofia (person_id=2) and Okafor (person_id=6) also accessed lab on Jan 14 — noise rows requiring clearance cross-reference to eliminate
 
 ---
 
