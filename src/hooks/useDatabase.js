@@ -14,6 +14,7 @@ export function useDatabase() {
         if (!response.ok) throw new Error('Database not found')
         const buffer = await response.arrayBuffer()
         dbRef.current = new SQL.Database(new Uint8Array(buffer))
+        window._db = dbRef.current  // dev helper for console queries
         setDbReady(true)
       } catch (err) {
         setDbError(err.message)
