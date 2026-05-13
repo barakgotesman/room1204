@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useDatabase } from './hooks/useDatabase'
 import { useQueryHistory } from './hooks/useQueryHistory'
 import { useHintProgression } from './hooks/useHintProgression'
@@ -27,6 +27,8 @@ export default function App() {
   const [showExport, setShowExport] = useState(false)
   const [solved, setSolved] = useState(false)
   const [startTime, setStartTime] = useState(null)
+  // Mobile only: briefing panel is collapsed by default to give more space to the editor
+  const [briefingOpen, setBriefingOpen] = useState(false)
 
   function handleRun(sql) {
     const { results: res, error } = runQuery(sql)
@@ -102,19 +104,41 @@ export default function App() {
     <>
       <div id="grain" />
       <Layout onHintClick={() => setShowHint(true)} onTablesClick={() => setShowTables(true)} onExportClick={() => setShowExport(true)} startTime={startTime} timerStopped={solved}>
-        <div className="w-80 flex-shrink-0 flex flex-col border-r border-border overflow-y-auto bg-bg">
-          <div className="p-6 flex-1">
-            <CaseBriefing onQueryClick={setRerunQuery} narrativeUpdates={narrativeUpdates} />
+        {/* On mobile: stacked vertically with collapsible briefing. On desktop: fixed sidebar + scrollable main. */}
+        <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
+
+          {/* Sidebar */}
+          <div className="md:w-80 flex-shrink-0 flex flex-col md:border-r border-border bg-bg md:overflow-y-auto">
+
+            {/* Mobile collapse toggle — hidden on desktop */}
+            <button
+              className="md:hidden flex items-center justify-between px-4 py-3 border-b border-border text-left"
+              onClick={() => setBriefingOpen(o => !o)}
+            >
+              <span className="font-mono text-xs tracking-widest uppercase text-accent">Case Briefing</span>
+              <span className="font-mono text-xs text-text-dim">{briefingOpen ? '▲ collapse' : '▼ expand'}</span>
+            </button>
+
+            {/* Briefing — always visible on desktop, toggled on mobile */}
+            <div className={`${briefingOpen ? 'block' : 'hidden'} md:block flex-1 overflow-y-auto`}>
+              <div className="p-4 md:p-6">
+                <CaseBriefing onQueryClick={(q) => { setRerunQuery(q); setBriefingOpen(false) }} narrativeUpdates={narrativeUpdates} />
+              </div>
+            </div>
+
+            {/* Submit button — always visible regardless of collapse state */}
+            <div className="p-4 md:p-6 border-t border-border">
+              <SubmitAnswer onSolve={() => setSolved(true)} />
+            </div>
           </div>
-          <div className="p-6 border-t border-border">
-            <SubmitAnswer onSolve={() => setSolved(true)} />
-          </div>
-        </div>
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
-            <SqlEditor onRun={handleRun} initialQuery={rerunQuery} />
-            <ResultsTable results={results} error={queryError} />
-            <QueryHistory history={history} onRerun={setRerunQuery} />
+
+          {/* Main editor panel */}
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 overflow-y-auto p-4 md:p-6 flex flex-col gap-6">
+              <SqlEditor onRun={handleRun} initialQuery={rerunQuery} />
+              <ResultsTable results={results} error={queryError} />
+              <QueryHistory history={history} onRerun={setRerunQuery} />
+            </div>
           </div>
         </div>
       </Layout>
