@@ -8,5 +8,7 @@ export function useQueryHistory() {
     setHistory(prev => [...prev.slice(-9), { sql: sql.trim(), rowCount, time }])
   }, [])
 
-  return { history, addToHistory }
+  const resetHistory = useCallback(() => setHistory([]), [])
+
+  return { history, addToHistory, resetHistory }
 }

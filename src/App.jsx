@@ -16,7 +16,7 @@ import IntroScreen from './components/IntroScreen'
 export default function App() {
   const { dbReady, dbError, runQuery } = useDatabase()
   const [introDone, setIntroDone] = useState(false)
-  const { history, addToHistory } = useQueryHistory()
+  const { history, addToHistory, resetHistory } = useQueryHistory()
   const { trackTables, hintStage, narrativeUpdates } = useHintProgression()
 
   const [results, setResults] = useState(null)
@@ -88,7 +88,7 @@ export default function App() {
           )}
           <div className="mt-8 font-mono text-xs text-muted">— Room 1204 —</div>
           <button
-            onClick={() => { setSolved(false); setStartTime(Date.now()) }}
+            onClick={() => { setSolved(false); setStartTime(Date.now()); resetHistory() }}
             className="mt-6 font-mono text-xs tracking-widest uppercase text-text-dim border border-border px-8 py-2.5 hover:border-accent hover:text-accent transition-colors"
           >
             Investigate Again

@@ -32,6 +32,9 @@ export default function IntroScreen({ onEnter, dbReady }) {
   const [exiting, setExiting] = useState(false)          // fade-out started
   const timerRef = useRef(null)
 
+  // Typewriter engine — re-runs every time lineIndex or charIndex advances.
+  // Each tick schedules exactly one setTimeout, which in turn increments the
+  // relevant counter and triggers the next tick via the dependency array.
   useEffect(() => {
     if (lineIndex >= LINES.length) {
       setDone(true)
@@ -51,7 +54,7 @@ export default function IntroScreen({ onEnter, dbReady }) {
       return
     }
 
-    // Still typing the current line
+    // Still typing the current line — reveal one more character per tick
     if (charIndex < line.text.length) {
       timerRef.current = setTimeout(() => {
         setCurrentText(line.text.slice(0, charIndex + 1))
@@ -60,7 +63,7 @@ export default function IntroScreen({ onEnter, dbReady }) {
       return
     }
 
-    // Line fully typed — pause, then commit it and move to next
+    // Line fully typed — pause at LINE_PAUSE, then commit it to visibleLines and advance
     timerRef.current = setTimeout(() => {
       setVisibleLines(prev => [...prev, line])
       setCurrentText('')
