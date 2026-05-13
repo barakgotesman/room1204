@@ -24,6 +24,7 @@ export default function App() {
   const [showHint, setShowHint] = useState(false)
   const [showTables, setShowTables] = useState(false)
   const [solved, setSolved] = useState(false)
+  const [startTime, setStartTime] = useState(null)
 
   function handleRun(sql) {
     const { results: res, error } = runQuery(sql)
@@ -34,7 +35,7 @@ export default function App() {
   }
 
   if (!introDone) return (
-    <IntroScreen onEnter={() => setIntroDone(true)} dbReady={dbReady} />
+    <IntroScreen onEnter={() => { setIntroDone(true); setStartTime(Date.now()) }} dbReady={dbReady} />
   )
 
   if (dbError) return (
@@ -53,31 +54,52 @@ export default function App() {
     </div>
   )
 
-  if (solved) return (
-    <div className="flex items-center justify-center min-h-screen bg-bg px-8">
-      <div id="grain" />
-      <div className="max-w-lg text-center">
-        <div className="font-mono text-xs tracking-widest uppercase text-accent mb-4">Case Closed</div>
-        <h1 className="font-display text-4xl font-bold text-accent mb-6">Marcus Webb</h1>
-        <div className="w-16 h-px bg-accent mx-auto mb-6" />
-        <p className="font-body text-sm leading-relaxed text-text-dim mb-4">
-          CFO of NovaPharma. He stole compound RH-7749 from the R&D lab on January 14th, entered room 1204 at 20:25 while Harmon was at the bar, and dissolved the neurotoxin in the minibar.
-        </p>
-        <p className="font-body text-sm leading-relaxed text-text-dim mb-4">
-          Harmon returned at 21:18. He was dead by 21:50. Two days later, Webb closed a $4.2M short position in NovaPharma stock — before the board could announce Harmon's termination plans for him.
-        </p>
-        <p className="font-body text-sm leading-relaxed text-text-dim">
-          The compound, the keycard, the trades. You found all three.
-        </p>
-        <div className="mt-8 font-mono text-xs text-muted">— Room 1204 —</div>
+  if (solved) {
+    const elapsed = startTime ? Math.floor((Date.now() - startTime) / 1000) : 0
+    const h = Math.floor(elapsed / 3600)
+    const m = Math.floor((elapsed % 3600) / 60)
+    const s = elapsed % 60
+    const timeDisplay = h > 0
+      ? `${h}h ${m}m ${s}s`
+      : m > 0 ? `${m}m ${s}s` : `${s}s`
+
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-bg px-8">
+        <div id="grain" />
+        <div className="max-w-lg text-center">
+          <div className="font-mono text-xs tracking-widest uppercase text-accent mb-4">Case Closed</div>
+          <h1 className="font-display text-4xl font-bold text-accent mb-6">Marcus Webb</h1>
+          <div className="w-16 h-px bg-accent mx-auto mb-6" />
+          <p className="font-body text-sm leading-relaxed text-text-dim mb-4">
+            CFO of NovaPharma. He stole compound RH-7749 from the R&D lab on January 14th, entered room 1204 at 20:25 while Harmon was at the bar, and dissolved the neurotoxin in the minibar.
+          </p>
+          <p className="font-body text-sm leading-relaxed text-text-dim mb-4">
+            Harmon returned at 21:18. He was dead by 21:50. Two days later, Webb closed a $4.2M short position in NovaPharma stock — before the board could announce Harmon's termination plans for him.
+          </p>
+          <p className="font-body text-sm leading-relaxed text-text-dim">
+            The compound, the keycard, the trades. You found all three.
+          </p>
+          {startTime && (
+            <div className="mt-6 font-mono text-xs text-success tracking-widest">
+              Investigation completed in {timeDisplay}
+            </div>
+          )}
+          <div className="mt-8 font-mono text-xs text-muted">— Room 1204 —</div>
+          <button
+            onClick={() => { setSolved(false); setStartTime(Date.now()) }}
+            className="mt-6 font-mono text-xs tracking-widest uppercase text-text-dim border border-border px-8 py-2.5 hover:border-accent hover:text-accent transition-colors"
+          >
+            Investigate Again
+          </button>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   return (
     <>
       <div id="grain" />
-      <Layout onHintClick={() => setShowHint(true)} onTablesClick={() => setShowTables(true)}>
+      <Layout onHintClick={() => setShowHint(true)} onTablesClick={() => setShowTables(true)} startTime={startTime} timerStopped={solved}>
         <div className="w-80 flex-shrink-0 flex flex-col border-r border-border overflow-y-auto bg-bg">
           <div className="p-6 flex-1">
             <CaseBriefing onQueryClick={setRerunQuery} narrativeUpdates={narrativeUpdates} />
