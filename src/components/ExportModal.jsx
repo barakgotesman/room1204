@@ -26,8 +26,8 @@ export default function ExportModal({ history, startTime, solved, onClose }) {
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" onClick={onClose}>
       <div
-        className="bg-surface border border-border p-6 mx-4 flex flex-col"
-        style={{ width: '42rem', maxHeight: '85vh' }}
+        className="bg-surface border border-border p-4 md:p-6 mx-3 md:mx-4 w-full md:w-[42rem] flex flex-col"
+        style={{ maxHeight: '85vh' }}
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center gap-3 mb-4">
@@ -40,7 +40,7 @@ export default function ExportModal({ history, startTime, solved, onClose }) {
           {text}
         </pre>
 
-        <div className="flex items-center gap-3 mt-4">
+        <div className="flex flex-wrap items-center gap-2 mt-4">
           <button
             onClick={handleCopy}
             className={`flex items-center gap-2 font-mono text-xs tracking-widest uppercase px-6 py-2 border transition-colors ${
