@@ -46,7 +46,11 @@ export default function ResultsTable({ results, error, loading }) {
           {values.map((row, i) => (
             <tr key={i} className="border-b border-border-dim hover:bg-surface-low transition-colors">
               {row.map((cell, j) => (
-                <td key={j} className="px-3 py-2 text-text-dim whitespace-nowrap max-w-xs truncate">
+                <td
+                  key={j}
+                  className="px-3 py-2 text-text-dim whitespace-nowrap max-w-xs truncate"
+                  title={cell === null ? 'null' : String(cell)}
+                >
                   {cell === null ? <span className="text-muted italic">null</span> : String(cell)}
                 </td>
               ))}
