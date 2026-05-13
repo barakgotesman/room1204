@@ -93,7 +93,7 @@ export default function IntroScreen({ onEnter, dbReady }) {
 
   return (
     <div
-      className={`fixed inset-0 bg-bg flex flex-col items-center justify-center z-50 transition-opacity duration-600 ${exiting ? 'opacity-0' : 'opacity-100'}`}
+      className={`fixed inset-0 bg-bg overflow-y-auto z-50 ${exiting ? 'opacity-0' : 'opacity-100'}`}
       style={{ transition: 'opacity 0.6s ease' }}
       onClick={!done ? handleSkip : undefined}
     >
@@ -101,19 +101,20 @@ export default function IntroScreen({ onEnter, dbReady }) {
       <div id="grain" />
 
       {/* Top label */}
-      <div className="absolute top-8 left-0 right-0 flex justify-center">
+      <div className="pt-8 pb-4 flex justify-center">
         <span className="font-mono text-xs tracking-widest uppercase text-text-dim opacity-40">
           Room 1204 — Classified Access
         </span>
       </div>
 
-      {/* Davos image */}
-      <div className="max-w-xl w-full px-8 mb-8">
-        <div className="relative w-full h-48 overflow-hidden" style={{ borderBottom: '1px solid #1e1e2e' }}>
+      {/* Davos image — fixed aspect ratio so it works on all screen sizes */}
+      <div className="max-w-xl mx-auto w-full px-6 mb-8">
+        <div className="relative w-full overflow-hidden" style={{ aspectRatio: '16/7', borderBottom: '1px solid #1e1e2e' }}>
           <img
             src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"
             alt="Davos, Switzerland"
-            className="w-full h-full object-cover object-center opacity-60"
+            loading="eager"
+            className="absolute inset-0 w-full h-full object-cover object-center opacity-60"
             style={{ filter: 'grayscale(60%) contrast(1.1)' }}
           />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 50%, #0a0a0f 100%)' }} />
@@ -123,8 +124,8 @@ export default function IntroScreen({ onEnter, dbReady }) {
         </div>
       </div>
 
-      {/* Typed text block */}
-      <div className="max-w-xl w-full px-8">
+      {/* Typed text block — anchored to top, grows downward as lines appear */}
+      <div className="max-w-xl mx-auto w-full px-6 pb-8">
         {visibleLines.map((line, i) => (
           <div key={i} className="min-h-[1.6rem]">
             {line.type === 'label' && (
@@ -161,31 +162,31 @@ export default function IntroScreen({ onEnter, dbReady }) {
           </div>
         )}
 
-        {/* Blinking cursor while still typing */}
+        {/* Blinking cursor between lines */}
         {!done && lineIndex < LINES.length && currentText === '' && (
           <span className="font-mono text-accent animate-pulse">▋</span>
         )}
-      </div>
 
-      {/* CTA — only shown when typing is done and DB is ready */}
-      {done && (
-        <div className="mt-12 flex flex-col items-center gap-3" style={{ animation: 'fadeIn 0.8s ease forwards' }}>
-          <button
-            onClick={handleEnter}
-            disabled={!dbReady}
-            className="font-mono text-xs tracking-widest uppercase border border-accent text-accent px-10 py-3 hover:bg-accent hover:text-bg transition-colors disabled:opacity-40 disabled:cursor-wait"
-          >
-            {dbReady ? 'Begin Investigation' : 'Accessing Database…'}
-          </button>
-          {!dbReady && (
-            <span className="font-mono text-xs text-text-dim animate-pulse">Loading evidence…</span>
-          )}
-        </div>
-      )}
+        {/* CTA — fades in when typing is done and DB is ready */}
+        {done && (
+          <div className="mt-10 flex flex-col items-start gap-3" style={{ animation: 'fadeIn 0.8s ease forwards' }}>
+            <button
+              onClick={handleEnter}
+              disabled={!dbReady}
+              className="font-mono text-xs tracking-widest uppercase border border-accent text-accent px-10 py-3 hover:bg-accent hover:text-bg transition-colors disabled:opacity-40 disabled:cursor-wait"
+            >
+              {dbReady ? 'Begin Investigation' : 'Accessing Database…'}
+            </button>
+            {!dbReady && (
+              <span className="font-mono text-xs text-text-dim animate-pulse">Loading evidence…</span>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* Skip hint */}
       {!done && (
-        <div className="absolute bottom-8 left-0 right-0 flex justify-center">
+        <div className="fixed bottom-8 left-0 right-0 flex justify-center pointer-events-none">
           <span className="font-mono text-xs text-text-dim opacity-30">click anywhere to skip</span>
         </div>
       )}
