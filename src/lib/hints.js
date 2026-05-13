@@ -46,6 +46,9 @@ export function getHintStage(queriedTables) {
 
 export function getNarrativeUpdates(queriedTables) {
   const updates = []
+
+  // --- Correct path: evidence that builds toward Marcus ---
+
   if (queriedTables.has('coroner_reports')) {
     updates.push("The coroner's report confirms it: compound RH-7749, a delayed-acting neurotoxin developed in NovaPharma's own R&D lab. Onset: 60–90 minutes. Someone with lab clearance obtained it.")
   }
@@ -58,5 +61,30 @@ export function getNarrativeUpdates(queriedTables) {
   if (queriedTables.has('lab_access_logs')) {
     updates.push("Lab access logs show an entry on January 14th — three days before the murder. The compound went missing that night.")
   }
+
+  // --- Red herrings: each wrong path gets closed off with a reason ---
+
+  if (queriedTables.has('transactions')) {
+    updates.push("Sofia's Cayman transfers look suspicious — but cross-referencing the emails reveals correspondence with KPMG. It's aggressive tax optimization, not a murder fund.")
+  }
+  if (queriedTables.has('flights') || queriedTables.has('boarding_passes')) {
+    updates.push("Flight LX439 to Tokyo — boarding pass confirmed, seat 14C. Sofia Reyes was airborne when Harmon died. She's off the list.")
+  }
+  if (queriedTables.has('board_decisions')) {
+    updates.push("The board had scheduled Sofia's termination for January 20th. She had motive — but she had no opportunity. Someone with access to both the lab and the hotel room pulled this off.")
+  }
+  if (queriedTables.has('phone_calls')) {
+    updates.push("James Chen was on a 47-minute board call from Geneva at 21:10 — right inside the murder window. Different city, different country. Chen's alibi holds.")
+  }
+  if (queriedTables.has('contracts')) {
+    updates.push("Chen's $800M acquisition deal was initiated by Harmon himself. Chen had everything to lose if Harmon died. The contract actually rules him out.")
+  }
+  if (queriedTables.has('restaurant_receipts')) {
+    updates.push("Elena Marsh's dinner for two — her editor from the FT's New York desk. She was chasing a story about NovaPharma's pipeline, not orchestrating a murder.")
+  }
+  if (queriedTables.has('social_media_posts')) {
+    updates.push("Marcus's Instagram shows him at a rooftop bar across town at 20:30. But the location tag was entered manually — not GPS. It proves nothing.")
+  }
+
   return updates
 }
