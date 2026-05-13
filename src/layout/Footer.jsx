@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { IconCheck } from '../components/Icons'
 
 export default function Footer({ startTime, stopped }) {
   const [elapsed, setElapsed] = useState(0)
@@ -29,8 +30,8 @@ export default function Footer({ startTime, stopped }) {
         A SQL mystery game &nbsp;·&nbsp; SQLite syntax
       </span>
       {startTime ? (
-        <span className={`font-mono text-xs tracking-widest ${stopped ? 'text-success' : 'text-text-dim'}`}>
-          {stopped ? '✓ ' : ''}{display}
+        <span className={`flex items-center gap-1 font-mono text-xs tracking-widest ${stopped ? 'text-success' : 'text-text-dim'}`}>
+          {stopped && <IconCheck size={12} />}{display}
         </span>
       ) : (
         <span className="font-mono text-xs text-border tracking-widest uppercase">Room 1204</span>

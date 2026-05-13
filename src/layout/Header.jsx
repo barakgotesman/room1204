@@ -1,4 +1,6 @@
-export default function Header({ onHintClick, onTablesClick }) {
+import { IconExport, IconTable, IconHint } from '../components/Icons'
+
+export default function Header({ onHintClick, onTablesClick, onExportClick }) {
   return (
     <header className="flex items-center justify-between px-6 py-3 border-b border-border bg-bg flex-shrink-0">
       <div className="flex items-center gap-4">
@@ -18,16 +20,22 @@ export default function Header({ onHintClick, onTablesClick }) {
       </div>
       <div className="flex items-center gap-3">
         <button
-          onClick={onTablesClick}
-          className="font-mono text-xs tracking-widest uppercase text-text-dim border border-border px-4 py-2 hover:border-accent hover:text-accent transition-colors"
+          onClick={onExportClick}
+          className="flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-text-dim border border-border px-4 py-2 hover:border-accent hover:text-accent transition-colors"
         >
-          📋 Tables
+          <IconExport /> Export
+        </button>
+        <button
+          onClick={onTablesClick}
+          className="flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-text-dim border border-border px-4 py-2 hover:border-accent hover:text-accent transition-colors"
+        >
+          <IconTable /> Tables
         </button>
         <button
           onClick={onHintClick}
-          className="font-mono text-xs tracking-widest uppercase text-accent border border-accent px-4 py-2 hover:bg-accent hover:text-bg transition-colors"
+          className="flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-accent border border-accent px-4 py-2 hover:bg-accent hover:text-bg transition-colors"
         >
-          ❓ Hint
+          <IconHint /> Hint
         </button>
       </div>
     </header>

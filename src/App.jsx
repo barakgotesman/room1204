@@ -9,6 +9,7 @@ import ResultsTable from './components/ResultsTable'
 import QueryHistory from './components/QueryHistory'
 import HintPanel from './components/HintPanel'
 import TablesModal from './components/TablesModal'
+import ExportModal from './components/ExportModal'
 import SubmitAnswer from './components/SubmitAnswer'
 import IntroScreen from './components/IntroScreen'
 
@@ -23,6 +24,7 @@ export default function App() {
   const [rerunQuery, setRerunQuery] = useState(null)
   const [showHint, setShowHint] = useState(false)
   const [showTables, setShowTables] = useState(false)
+  const [showExport, setShowExport] = useState(false)
   const [solved, setSolved] = useState(false)
   const [startTime, setStartTime] = useState(null)
 
@@ -99,7 +101,7 @@ export default function App() {
   return (
     <>
       <div id="grain" />
-      <Layout onHintClick={() => setShowHint(true)} onTablesClick={() => setShowTables(true)} startTime={startTime} timerStopped={solved}>
+      <Layout onHintClick={() => setShowHint(true)} onTablesClick={() => setShowTables(true)} onExportClick={() => setShowExport(true)} startTime={startTime} timerStopped={solved}>
         <div className="w-80 flex-shrink-0 flex flex-col border-r border-border overflow-y-auto bg-bg">
           <div className="p-6 flex-1">
             <CaseBriefing onQueryClick={setRerunQuery} narrativeUpdates={narrativeUpdates} />
@@ -119,6 +121,7 @@ export default function App() {
 
       {showHint && <HintPanel stage={hintStage} onClose={() => setShowHint(false)} />}
       {showTables && <TablesModal onClose={() => setShowTables(false)} onQuery={q => { setRerunQuery(q); setShowTables(false) }} />}
+      {showExport && <ExportModal history={history} startTime={startTime} solved={solved} onClose={() => setShowExport(false)} />}
     </>
   )
 }
