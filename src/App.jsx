@@ -10,9 +10,11 @@ import QueryHistory from './components/QueryHistory'
 import HintPanel from './components/HintPanel'
 import TablesModal from './components/TablesModal'
 import SubmitAnswer from './components/SubmitAnswer'
+import IntroScreen from './components/IntroScreen'
 
 export default function App() {
   const { dbReady, dbError, runQuery } = useDatabase()
+  const [introDone, setIntroDone] = useState(false)
   const { history, addToHistory } = useQueryHistory()
   const { trackTables, hintStage, narrativeUpdates } = useHintProgression()
 
@@ -30,6 +32,10 @@ export default function App() {
     trackTables(sql)
     addToHistory({ sql, rowCount: res?.[0]?.values?.length ?? null })
   }
+
+  if (!introDone) return (
+    <IntroScreen onEnter={() => setIntroDone(true)} dbReady={dbReady} />
+  )
 
   if (dbError) return (
     <div className="flex items-center justify-center h-screen bg-bg">
