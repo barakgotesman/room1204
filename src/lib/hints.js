@@ -10,14 +10,37 @@ export const HINTS = [
 
 export function getHintStage(queriedTables) {
   const qt = queriedTables
+
+  // Stage 6: player queried the final evidence tables (all three pillars)
+  if (
+    qt.has('hotel_key_access') &&
+    qt.has('stock_trades') &&
+    (qt.has('lab_access_logs') || qt.has('drug_inventory'))
+  ) return 6
+
+  // Stage 5: has core evidence + at least one more investigative table
   if (
     qt.has('coroner_reports') &&
     qt.has('hotel_key_access') &&
-    (qt.has('travel_records') || qt.has('phone_calls') || qt.has('board_decisions') || qt.has('transactions'))
+    (qt.has('stock_trades') || qt.has('lab_access_logs') || qt.has('drug_inventory') ||
+     qt.has('travel_records') || qt.has('phone_calls') || qt.has('board_decisions') || qt.has('transactions'))
   ) return 5
+
+  // Stage 4: queried alibi tables alongside keycard/hotel data
+  if (
+    (qt.has('travel_records') || qt.has('phone_calls') || qt.has('board_decisions') || qt.has('transactions')) &&
+    (qt.has('hotel_key_access') || qt.has('hotel_guests'))
+  ) return 4
+
+  // Stage 3: cross-referenced coroner + keycard
   if (qt.has('coroner_reports') && qt.has('hotel_key_access')) return 3
+
+  // Stage 2: started looking at hotel access/guests
   if (qt.has('hotel_guests') || qt.has('hotel_key_access')) return 2
+
+  // Stage 1: looked at the initial incident or coroner data
   if (qt.has('incident_reports') || qt.has('coroner_reports')) return 1
+
   return 0
 }
 
@@ -33,7 +56,7 @@ export function getNarrativeUpdates(queriedTables) {
     updates.push("Unusual trading activity detected: a large position closed two days after the death. Someone knew what was coming.")
   }
   if (queriedTables.has('lab_access_logs')) {
-    updates.push("Lab access logs show an entry on January 14th — one day before the summit. The compound went missing that night.")
+    updates.push("Lab access logs show an entry on January 14th — three days before the murder. The compound went missing that night.")
   }
   return updates
 }
