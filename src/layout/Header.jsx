@@ -12,7 +12,7 @@ export default function Header({ onHintClick, onTablesClick }) {
             ROOM 1204
           </h1>
           <span className="font-mono text-xs text-text-dim tracking-widest uppercase leading-tight">
-            The Davos Affair
+            Room 1204
           </span>
         </div>
       </div>

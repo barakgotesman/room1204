@@ -63,7 +63,7 @@ export default function App() {
         <p className="font-body text-sm leading-relaxed text-text-dim">
           The compound, the keycard, the trades. You found all three.
         </p>
-        <div className="mt-8 font-mono text-xs text-muted">— The Davos Affair —</div>
+        <div className="mt-8 font-mono text-xs text-muted">— Room 1204 —</div>
       </div>
     </div>
   )
